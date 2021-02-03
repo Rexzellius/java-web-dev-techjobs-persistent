@@ -9,21 +9,18 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("employers")
 public class EmployerController {
 
+    public static List<Employer> employers = new ArrayList<>();
+
     @Autowired
     private EmployerRepository employerRepository;
-
-    @GetMapping("")
-    public String displayAllEmployers(Model model) {
-        model.addAttribute("title", "All Employers");
-        model.addAttribute("employers", employerRepository.findAll());
-        return "employers/index";
-    }
 
     @GetMapping("add")
     public String displayAddEmployerForm(Model model) {
@@ -34,12 +31,12 @@ public class EmployerController {
     @PostMapping("add")
     public String processAddEmployerForm(@ModelAttribute @Valid Employer newEmployer,
                                          Errors errors, Model model) {
-
         if (errors.hasErrors()) {
             return "employers/add";
         }
         employerRepository.save(newEmployer);
         return "redirect:";
+
     }
 
     @GetMapping("view/{employerId}")
