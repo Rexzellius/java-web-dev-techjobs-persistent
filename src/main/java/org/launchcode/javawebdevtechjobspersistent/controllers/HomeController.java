@@ -71,7 +71,7 @@ public class HomeController {
         newJob.setSkills(skillsList);
         newJob.setName(name);
         jobRepository.save(newJob);
-        return "redirect:view/" + newJob.getId();
+        return "redirect:";
     }
 
     @GetMapping("view/{jobId}")
