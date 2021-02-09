@@ -22,7 +22,6 @@ public class Skill extends AbstractEntity {
     public Skill() {
     }
 
-    @NotNull(message = "Cannot have no skills.")
     public Skill(String description) {
         super();
         this.description = description;
