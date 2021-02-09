@@ -13,6 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,27 +41,37 @@ public class HomeController {
 
     @GetMapping("add")
     public String displayAddJobForm(Model model) {
-        model.addAttribute("employers", employerRepository.findAll());
-        model.addAttribute("skills", skillRepository.findAll());
         model.addAttribute("title", "Add Job");
+        Iterable<Employer> employers;
+        employers = employerRepository.findAll();
+        model.addAttribute("employers", employers);
+        Iterable<Skill> skills;
+        skills = skillRepository.findAll();
+        model.addAttribute("skills", skills);
         model.addAttribute(new Job());
         return "add";
     }
 
     @PostMapping("add")
-    public String processAddJobForm(@ModelAttribute @Valid Job newJob, Errors errors, Model model,
-                                    @RequestParam int employerId, @RequestParam List<Integer> skills) {
+    public String processAddJobForm(@ModelAttribute @Valid Job newJob,
+                                    Errors errors, Model model,
+                                    @RequestParam String name,
+                                    @RequestParam int employerId,
+                                    @RequestParam List<Integer> skills) {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Job");
             return "add";
         }
-        Employer newEmployer = employerRepository.findById(employerId).get();
-        List<Skill> skillsObjs = (List<Skill>)skillRepository.findAllById(skills);
-        newJob.setSkills(skillsObjs);
-        newJob.setEmployer(newEmployer);
+        newJob.setEmployer(employerRepository.findById(employerId).get());
+        List<Skill> skillsList = new ArrayList<>();
+        for (Skill skill : skillRepository.findAllById(skills)) {
+            skillsList.add(skill);
+        }
+        newJob.setSkills(skillsList);
+        newJob.setName(name);
         jobRepository.save(newJob);
-        return "redirect:";
+        return "redirect:view/" + newJob.getId();
     }
 
     @GetMapping("view/{jobId}")
@@ -73,4 +84,5 @@ public class HomeController {
         }
         return "redirect::";
     }
+
 }

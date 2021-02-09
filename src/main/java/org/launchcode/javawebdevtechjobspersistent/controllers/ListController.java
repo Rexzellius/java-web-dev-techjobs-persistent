@@ -35,14 +35,13 @@ public class ListController {
     public ListController () {
 
         columnChoices.put("all", "All");
-        columnChoices.put("employer", "Employer");
         columnChoices.put("employers", "Employers");
         columnChoices.put("skills", "Skills");
-        columnChoices.put("skill", "Skill");
     }
 
     @RequestMapping("")
     public String list(Model model) {
+        model.addAttribute("all", "viewAll");
         model.addAttribute("employers", employerRepository.findAll());
         model.addAttribute("skills", skillRepository.findAll());
         return "list";
