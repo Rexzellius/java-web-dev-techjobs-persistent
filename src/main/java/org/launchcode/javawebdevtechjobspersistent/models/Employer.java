@@ -13,12 +13,12 @@ import java.util.List;
 public class Employer extends AbstractEntity {
 
     @NotBlank(message = "Location cannot be empty.")
-    @Size(min=2, max=100)
+    @Size(min = 2, max = 100)
     private String location;
 
     @OneToMany
-    @JoinColumn
-    private final List<Job> jobs = new ArrayList<>();
+    @JoinColumn(name = "employer_id")
+    private List<Job> jobs = new ArrayList<>();
 
     // constructors
 
@@ -38,6 +38,14 @@ public class Employer extends AbstractEntity {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public List<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(List<Job> jobs) {
+        this.jobs = jobs;
     }
 }
 
