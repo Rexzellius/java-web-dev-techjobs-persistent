@@ -56,14 +56,19 @@ public class HomeController {
     public String processAddJobForm(@ModelAttribute @Valid Job newJob,
                                     Errors errors, Model model,
                                     @RequestParam String name,
-                                    @RequestParam int employerId,
-                                    @RequestParam List<Integer> skills) {
-
-        if (errors.hasErrors()) {
+                                    @RequestParam(required = false) Integer employerId,
+                                    @RequestParam(required = false) List<Integer> skills) {
+        if (skills == null) {
+            errors.rejectValue("skills", "NullPointerException", "Job must have skills!");
+        } if (employerId == null) {
+            errors.rejectValue("employer", "NullPointerException", "Employer is required!");
+        }   if (errors.hasErrors()) {
             model.addAttribute("title", "Add Job");
+            model.addAttribute("employers", employerRepository.findAll());
+            model.addAttribute("skills", skillRepository.findAll());
             return "add";
         }
-        newJob.setEmployer(employerRepository.findById(employerId).get());
+        newJob.setEmployer(employerRepository.findById(employerId).orElse(new Employer()));
         List<Skill> skillsList = new ArrayList<>();
         for (Skill skill : skillRepository.findAllById(skills)) {
             skillsList.add(skill);
