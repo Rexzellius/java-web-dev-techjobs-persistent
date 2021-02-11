@@ -12,9 +12,11 @@ FROM employer
 WHERE location = "St. Louis City";
 
 ## Part 3: Test it with SQL
-DROP TABLE techjobs.job;
+DROP TABLE job;
 
 ## Part 4: Test it with SQL
--- SELECT skill.name, skill.description FROM skill
--- WHERE skill_id IS NOT NULL
--- ORDER BY skill.name ASC;
+SELECT name, description
+FROM skill
+INNER JOIN job_skill ON skill.id=job_skill.skill_id
+WHERE jobs_id IS NOT NULL
+ORDER BY name;

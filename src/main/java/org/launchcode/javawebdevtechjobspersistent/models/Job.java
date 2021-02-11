@@ -3,6 +3,7 @@ package org.launchcode.javawebdevtechjobspersistent.models;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class Job extends AbstractEntity {
     public Job() {
     }
 
-    public Job(Employer anEmployer, List<Skill> someSkills) {
+    public Job(@NotBlank(message = "Field cannot be blank") Employer anEmployer, @NotBlank(message = "Field cannot be blank") List<Skill> someSkills) {
         super();
         this.employer = anEmployer;
         this.skill = someSkills;
